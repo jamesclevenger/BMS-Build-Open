@@ -5,9 +5,33 @@
 Requires access to the private InventoryMangement repository - contact [IBP - Integrated Breeding Platform](https://github.com/IntegratedBreedingPlatform) for access.
 Once you have access, you need to follow the github ssh set up and copy your key to the local directory and name it id_rsa.
 
+
+The goal is to be able to use the following command to build all, with the output going to ./out folder
 ```bash
-docker build --output out .
+# can't use (yet)
+docker build --ssh default=<path to your ssh key> --output out .
 ```
+But... there are issues with the docker ssh passthrough when calling yarn in the Workbench repo, and there are some insecure references to packages in the Workbench so the build steps are more complicated.
+```bash
+# first build the image
+docker build -t bmsbuilder .
+
+# "shell into" the running the imgage
+docker run -it bmsbuilder bash
+
+# change settings to allow insecure (http) maven references
+# update /usr/share/maven/conf/settings.xml per Nick's answer here: https://stackoverflow.com/questions/67833372/getting-blocked-mirror-for-repositories-maven-error-even-after-adding-mirrors
+
+# then from the /bmssource/Workbench directory, build Workbench
+mvn clean install -DskipTests -Duser.name=template -e
+
+# from a separate shell, copy our the war files
+docker cp <your-docker-container-ref>:/bmssource/BMSAPI/target/bmsapi.war .
+docker cp <your-docker-container-ref>:/bmssource/Fieldbook/target/Fieldbook.war .
+docker cp <your-docker-container-ref>:/bmssource/InventoryManager/target/inventory-manager.war .
+docker cp <your-docker-container-ref>:/bmssource/Workbench/target/Workbench.war .
+```
+
 
 The build outputs .war files for:
 * bmsapi.war

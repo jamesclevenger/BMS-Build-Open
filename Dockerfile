@@ -1,4 +1,5 @@
-FROM openjdk:8-jdk-buster as bmsbuilder
+FROM openjdk:8-jdk-buster 
+#as bmsbuilder
 
 #########################
 # if you copied your github ssh key to local directory and named it id_rsa
@@ -31,13 +32,13 @@ ENV NODE_PATH $NVM_DIR/v$NODE_VERSION/lib/node_modules
 ENV PATH      $NVM_DIR/v$NODE_VERSION/bin:$PATH
 
 #------ Start Maven Setup --------------------------------------------------------#
-ARG MAVEN_VERSION=3.3.9
+ARG MAVEN_VERSION=3.9.3
 
 # 2- Define a constant with the working directory
 ARG USER_HOME_DIR="/root"
 
 # 3- Define the SHA key to validate the maven download
-ARG SHA=9b4b22aba67af48648c634e30edbb03de2a7742b7d4e58b3d637fcd20358a51ccb288dcbd473169a58b9322f7c8fbedcf5336b87d06460d0b20ce37d4c3948b0
+ARG SHA=400fc5b6d000c158d5ee7937543faa06b6bda8408caa2444a9c947c21472fde0f0b64ac452b8cec8855d528c0335522ed5b6c8f77085811c7e29e1bedbb5daa2
 
 # 4- Define the URL where maven can be downloaded from
 ARG BASE_URL=https://dlcdn.apache.org/maven/maven-3/${MAVEN_VERSION}/binaries
@@ -79,9 +80,8 @@ RUN mkdir /bmssource \
   && git clone https://github.com/IntegratedBreedingPlatform/Middleware.git \ 
   && git clone https://github.com/IntegratedBreedingPlatform/Commons.git \
   && git clone https://github.com/IntegratedBreedingPlatform/Fieldbook.git \
-  && git clone https://github.com/IntegratedBreedingPlatform/Workbench.git 
-
-#RUN git clone git@github.com:IntegratedBreedingPlatform/InventoryManager.git
+  && git clone https://github.com/IntegratedBreedingPlatform/Workbench.git  \
+  && git clone git@github.com:IntegratedBreedingPlatform/InventoryManager.git
 
 WORKDIR /bmssource/Middleware
 RUN --mount=type=ssh mvn clean install -DskipTests -Duser.name=template 
@@ -110,10 +110,10 @@ RUN sed -i 's/git:/https:/g' /bmssource/Workbench/src/main/web/yarn.lock
 RUN sed -i 's/<arguments>install</<arguments>install --network-concurrency 1</' /bmssource/Workbench/pom.xml
 
 WORKDIR /bmssource/Workbench
-RUN --mount=type=ssh mvn clean install -DskipTests -Duser.name=template -e
+#RUN --mount=type=ssh mvn clean install -DskipTests -Duser.name=template -e
 
-FROM scratch AS export-stage
-COPY --from=bmsbuilder /bmssource/BMSAPI/target/bmsapi.war .
-COPY --from=bmsbuilder /bmssource/Fieldbook/target/Fieldbook.war .
-COPY --from=bmsbuilder /bmssource/InventoryManager/target/inventory-manager.war .
-COPY --from=bmsbuilder /bmssource/Workbench/target/Workbench.war .
+#FROM scratch AS export-stage
+#COPY --from=bmsbuilder /bmssource/BMSAPI/target/bmsapi.war .
+#COPY --from=bmsbuilder /bmssource/Fieldbook/target/Fieldbook.war .
+#COPY --from=bmsbuilder /bmssource/InventoryManager/target/inventory-manager.war .
+#COPY --from=bmsbuilder /bmssource/Workbench/target/Workbench.war .
