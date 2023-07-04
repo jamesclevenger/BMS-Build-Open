@@ -2,8 +2,8 @@
 
 ## Dockerized build script for Breeding Management System components
 
-Requires access to the private InventoryMangement repository - contact owner of github.com/IntegratedBreedingPlatform
-Once you have access, you need to follow the github ssh set up and copy your key to the local directory and name it id_rsa
+Requires access to the private InventoryMangement repository - contact owner of github.com/IntegratedBreedingPlatform for access.
+Once you have access, you need to follow the github ssh set up and copy your key to the local directory and name it id_rsa.
 
 ```bash
 docker build --output out .
