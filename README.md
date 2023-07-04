@@ -38,3 +38,5 @@ The build outputs .war files for:
 * Fieldbook.war
 * inventory-manager.war
 * Workbench.war
+
+To run a dockerized version of BMS, copy over the war files and use the docker compose in [BMS-Runtime-Open](https://github.com/jamesclevenger/BMS-Runtime-Open)
