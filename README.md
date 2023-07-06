@@ -25,7 +25,7 @@ docker run -it bmsbuilder bash
 # then from the /bmssource/Workbench directory, build Workbench
 mvn clean install -DskipTests -Duser.name=template -e
 
-# from a separate shell, copy our the war files
+# from a separate shell, copy out the war files
 docker cp <your-docker-container-ref>:/bmssource/BMSAPI/target/bmsapi.war .
 docker cp <your-docker-container-ref>:/bmssource/Fieldbook/target/Fieldbook.war .
 docker cp <your-docker-container-ref>:/bmssource/InventoryManager/target/inventory-manager.war .
