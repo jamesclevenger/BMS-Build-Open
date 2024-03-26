@@ -21,6 +21,8 @@ docker run -it bmsbuilder bash
 
 # change settings to allow insecure (http) maven references
 # update /usr/share/maven/conf/settings.xml per Nick's answer here: https://stackoverflow.com/questions/67833372/getting-blocked-mirror-for-repositories-maven-error-even-after-adding-mirrors
+# ex: install vim with 'apt update' then 'apt install vim' then edit /usr/share/maven/conf/settings.xml and change
+# the <mirrorOf>external:http:*</mirrorOf> to <mirrorOf>external:dummy:*</mirrorOf>
 
 # then from the /bmssource/Workbench directory, build Workbench
 mvn clean install -DskipTests -Duser.name=template -e
@@ -29,7 +31,7 @@ mvn clean install -DskipTests -Duser.name=template -e
 docker cp <your-docker-container-ref>:/bmssource/BMSAPI/target/bmsapi.war .
 docker cp <your-docker-container-ref>:/bmssource/Fieldbook/target/Fieldbook.war .
 docker cp <your-docker-container-ref>:/bmssource/InventoryManager/target/inventory-manager.war .
-docker cp <your-docker-container-ref>:/bmssource/Workbench/target/Workbench.war .
+docker cp <your-docker-container-ref>:/bmssource/Workbench/target/ibpworkbench.war .
 ```
 
 
@@ -37,6 +39,6 @@ The build outputs .war files for:
 * bmsapi.war
 * Fieldbook.war
 * inventory-manager.war
-* Workbench.war
+* ibpworkbench.war
 
 To run a dockerized version of BMS, copy over the war files and use the docker compose in [BMS-Runtime-Open](https://github.com/jamesclevenger/BMS-Runtime-Open)
